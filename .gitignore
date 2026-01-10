@@ -1,0 +1,5 @@
+csv_data/
+logs/
+.env
+inventory.db
+.ipynb_checkpoints/
