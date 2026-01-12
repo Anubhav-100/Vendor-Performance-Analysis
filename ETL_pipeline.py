@@ -8,7 +8,7 @@ import time
 load_dotenv()
 
 logging.basicConfig(
-    filename='logs/db_log.log',             # Log file name
+    filename='logs/db_log.log',              # Log file name
     level=logging.INFO,                      # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
     format='%(asctime)s - %(levelname)s - %(message)s',
     filemode='a'                        
@@ -42,29 +42,37 @@ def connect_db(db_name=None):
     
 engine = connect_db()
 
-def ingest_csv_folder(folder_path="csv_data", engine=engine):
-    logging.info("-----Starting ETL process-----")
+def ingest_db(df, table_name, engine):
+    start = time.time()
+    try:
+        df.to_sql(
+            name=table_name,
+            con=engine,
+            if_exists="replace",
+            index=False,
+            chunksize=150000,
+            method="multi"
+        )
+        end = time.time()
+        logging.info(
+            f"Ingested DataFrame into `{table_name}` in {(end - start)/60:.2f} minutes"
+        )
+    except Exception as e:
+        logging.error(f"Error ingesting `{table_name}`: {e}")
+
+def ingest_raw_data(folder_path="csv_data", engine=engine):
+    logging.info("-----------Starting ETL process-----------")
+
     for file in os.listdir(folder_path):
         if file.endswith(".csv"):
-            start = time.time()
             table_name = file.replace(".csv", "")
             file_path = os.path.join(folder_path, file)
 
             try:
+                logging.info(f"Reading CSV file: {file}")
                 df = pd.read_csv(file_path)
-                logging.info(f"Starting ingestion: {file}")
-
-                df.to_sql(
-                    name=table_name, con=engine, if_exists="replace",                 
-                    index=False, chunksize=5000, method="multi"                   
-                )
-                
-                end = time.time()
-                logging.info(
-                    f"Ingested {file} into `{table_name}` "
-                    f"in {(end - start)/60:.2f} minutes"
-                )
-
+                ingest_db(df, table_name, engine)  # call the ingestion function
             except Exception as e:
-                logging.error(f"Error ingesting {file}: {e}")
-    logging.info("-----ETL process completed.-----")
+                logging.error(f"Error reading `{file}`: {e}")
+
+    logging.info("-----------ETL process completed.-----------")
