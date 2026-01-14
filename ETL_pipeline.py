@@ -48,9 +48,9 @@ def ingest_db(df, table_name, engine):
         df.to_sql(
             name=table_name,
             con=engine,
-            if_exists="replace",
+            if_exists="append",
             index=False,
-            chunksize=150000,
+            chunksize=15000,
             method="multi"
         )
         end = time.time()
