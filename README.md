@@ -4,6 +4,10 @@
 
 Vendor Performance Analysis is an end-to-end data analytics project that evaluates supplier efficiency using key procurement KPIs. The project ingests multiple CSV datasets, converts them into a structured relational database, performs large-scale data analysis, and delivers actionable business insights through optimized SQL queries and interactive Power BI dashboards. This project demonstrates strong skills in data modeling, ETL, SQL optimization, large data handling, and business-focused analytics. A key highlight of this project is handling a high-volume sales dataset with 10,000,000+ records, demonstrating real-world large-scale data processing capability.
 
+## 📈 **Power BI Dashboard** 
+
+![Project Screenshot](Dashboard.png.png)
+
 ## 🎯 **Business Objectives**
 - Measure vendor performance using quantifiable KPIs
 - Identify top and underperforming vendors
@@ -83,6 +87,3 @@ Vendor Performance Analysis is an end-to-end data analytics project that evaluat
 - Visualization: Power BI
 - Tools: Git, Jupyter Notebook, VS Code
 
-## 📈 **Power BI Dashboard** 
-
-![Project Screenshot](Dashboard.png.png)
